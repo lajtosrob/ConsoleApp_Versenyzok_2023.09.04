@@ -17,7 +17,7 @@ class Program
     {
         //2. pilotak.csv sorainak beolvasása 
 
-        StreamReader sr = new StreamReader("DATAS/pilotak.csv");
+        StreamReader sr = new StreamReader("DATAS/Pilotak.csv");
 
         string headerLine = sr.ReadLine();
 
@@ -49,34 +49,33 @@ class Program
 
         Console.WriteLine("5. feladat: ");
 
-        var pilotakXIX = PilotakList.Where( pilotak => DateTime.Parse(pilotak.SzuletesDatuma).Year < 1901).ToList();
-
-        pilotakXIX.ForEach(x => Console.WriteLine($"\t{x.Nev} ({x.SzuletesDatuma})"));
+        PilotakList
+            .Where(x => DateTime.Parse(x.SzuletesDatuma).Year < 1901)
+            .ToList()
+            .ForEach(x => Console.WriteLine($"\t{x.Nev} ({x.SzuletesDatuma})"));
 
         // 6. 
 
         Console.Write("6. feladat: ");
 
-        Pilotak legkisebbRajtszamu = PilotakList
-            .Where(p => !string.IsNullOrEmpty(p.Rajtszam)) // A rajtszámmal nem rendelkező pilótákat nem vesszük figyelembe.
-            .OrderBy(p =>int.Parse(p.Rajtszam)) // Rendezés növekvő sorrendbe rajtszám alapján
-            .FirstOrDefault();  // Az első pilóta kiválasztása a listában. 
+        var legkisebbRajtszam =  PilotakList
+            .Where(x => !string.IsNullOrEmpty(x.Rajtszam))
+            .OrderBy(x => int.Parse(x.Rajtszam))
+            .ToList()
+            .First();
 
-        Console.Write(legkisebbRajtszamu.Nemzetiseg);
-        Console.WriteLine();
+        Console.WriteLine(legkisebbRajtszam.Nemzetiseg);
 
         // 7.
 
         Console.Write("7. feladat:");
 
-        var tobbRajtszam = PilotakList
-            .Where(p => !string.IsNullOrEmpty (p.Rajtszam))
+        PilotakList
+            .Where(x => !string.IsNullOrEmpty(x.Rajtszam))
             .GroupBy(x => x.Rajtszam)
-            .Where(g => g.Count() > 1)
-            .Select(g => g.Key)
-            .ToList();
-
-        tobbRajtszam.ForEach(x => Console.Write($" {x}"));
-
+            .Where(x => x.Count() > 1)
+            .Select(x => x.Key)
+            .ToList()
+            .ForEach(x => Console.Write($" {x}"));
     }
 }

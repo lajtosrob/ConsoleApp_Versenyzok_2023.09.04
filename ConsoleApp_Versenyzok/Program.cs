@@ -25,15 +25,14 @@ class Program
         {
             string[] line = sr.ReadLine().Split(';');
 
-            Pilotak PilotakData = new Pilotak(
+            Pilotak pilotakData = new Pilotak(
                 line[0],
                 line[1],
                 line[2],
                 line[3]
                 );
 
-            PilotakList.Add( PilotakData ); 
-
+            PilotakList.Add( pilotakData );
         }
 
         sr.Close();
@@ -48,23 +47,11 @@ class Program
 
         // 5. 
 
-        Console.WriteLine("5. feladat:");
+        Console.WriteLine("5. feladat: ");
 
-        List<Pilotak> PilotakXIX = PilotakList.Where(x => isPilotakXIX(x.SzuletesDatuma)).ToList();
+        var pilotakXIX = PilotakList.Where( pilotak => DateTime.Parse(pilotak.SzuletesDatuma).Year < 1901).ToList();
 
-        foreach (Pilotak pilota in PilotakXIX)
-        {
-            Console.WriteLine($"\t{pilota.Nev} ({pilota.SzuletesDatuma})");
-        }
-
-        static bool isPilotakXIX(string szuletesiDatum)
-        {
-            if (DateTime.TryParse(szuletesiDatum, out DateTime datum) )
-            {
-                return datum.Year < 1901;
-            }
-            return false;
-        }
+        pilotakXIX.ForEach(x => Console.WriteLine($"\t{x.Nev} ({x.SzuletesDatuma})"));
 
         // 6. 
 
